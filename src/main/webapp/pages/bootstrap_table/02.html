@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Table</title>
+
+    <!--引入 jQuery 文件-->
+    <script src="../../../js/jquery-3.2.1.min.js?v.3.2.1"></script>
+
+    <!--引入 Bootstrap 文件-->
+    <script src="../../js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css?v3.3.7">
+
+    <!--引入 Bootstrap Table 文件-->
+    <link rel="stylesheet" href="../../css/bootstrap-table.min.css?v1.11.1">
+
+    <script src="../../js/bootstrap-table.min.js?v1.11.1"></script>
+
+    <script src="../../js/bootstrap-table-zh-CN.min.js?v1.11.1"></script>
+</head>
+<body>
+<table id="table"></table>
+
+<script type="text/javascript">
+    $('#table').bootstrapTable({
+        url: 'http://localhost:8585/mock/data.json',
+        columns: [{
+            field: 'id',
+            title: 'Item ID'
+        }, {
+            field: 'name',
+            title: 'Item Name'
+        }, {
+            field: 'price',
+            title: 'Item Price'
+        }]
+    });
+</script>
+</body>
+</html>

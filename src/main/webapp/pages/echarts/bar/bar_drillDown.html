@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bar 下钻 | Echarts</title>
+
+    <!--引入 Bootstrap CSS 文件-->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css?v3.3.7">
+
+    <!--引入 jQuery 文件-->
+    <script src="../../../js/jquery-3.2.1.min.js?v.3.2.1"></script>
+
+    <!--引入 ECharts 文件-->
+    <script src="../../../js/echarts.js?v3.6.2"></script>
+
+    <script src="bar_drillDown.js"></script>
+</head>
+<body>
+<button type="button" class="btn btn-primary" style="margin: 10px;" id="back-button">返回</button>
+
+<!--为 ECharts 准备一个具备大小（宽高）的 DOM-->
+<div id="example_01" style="width: 1200px; height: 800px; margin-top: 50px;"></div>
+
+<script type="text/javascript">
+    // 基于准备好的 dom，初始化 echarts 实例
+    var dom = document.getElementById('example_01'),
+        myChart = echarts.init(dom);
+
+    drillDown.initChart(myChart, drillDown.getOption());
+
+    $('#back-button').on('click', function () {
+        drillDown.initChart(echarts.init(dom), drillDown.getOption());
+    });
+</script>
+</body>
+</html>

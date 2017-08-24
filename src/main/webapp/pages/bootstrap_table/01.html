@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap Table</title>
+
+    <!--引入 jQuery 文件-->
+    <script src="../../../js/jquery-3.2.1.min.js?v3.2.1"></script>
+
+    <!--引入 Bootstrap 文件-->
+    <script src="../../js/bootstrap.min.js?v3.3.7"></script>
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css?v3.3.7">
+
+    <!--引入 Bootstrap Table 文件-->
+    <link rel="stylesheet" href="../../css/bootstrap-table.min.css?v1.11.1">
+
+    <script src="../../js/bootstrap-table.min.js?v1.11.1"></script>
+
+    <script src="../../js/bootstrap-table-zh-CN.min.js?v1.11.1"></script>
+
+    <!--引入 Font Awesome 字体文件-->
+    <link rel="stylesheet" href="../../css/font-awesome.min.css?v4.7.0">
+
+    <!--引入 JavaScript 日期处理类库 Moment-->
+    <script src="../../js/moment.js?2.10.6"></script>
+    <style>
+        .panel-body {
+            padding: 30px 60px;
+        }
+
+        .form-group {
+            margin-right: 100px;
+        }
+
+        .form-group > label {
+            margin-right: 15px;
+        }
+
+        #toolbar > button {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body style="padding: 10px;">
+<div class="row">
+    <div class="col col-sm-12 col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-filter"></i> 查询条件</div>
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="uid">用户编号</label>
+                        <input type="text" class="form-control" id="uid" placeholder="用户编号">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" class="form-control" id="name" placeholder="姓名">
+                    </div>
+                    <button type="button" class="btn btn-primary" style="float: right;" id="btn-search">查询</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-sm-12 col-md-12">
+        <div id="toolbar" class="btn-group">
+            <button id="btn-add" type="button" class="btn btn-primary btn-sm">
+                <i class="fa fa-plus"></i> 新增
+            </button>
+            <button id="btn-edit" type="button" class="btn btn-primary btn-sm">
+                <i class="fa fa-edit"></i> 修改
+            </button>
+            <button id="btn-delete" type="button" class="btn btn-primary btn-sm">
+                <i class="fa fa-remove"></i> 删除
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table id="example-table"></table>
+        </div>
+    </div>
+</div>
+<!--<div class="row">-->
+<!--<div class="col col-sm-12 col-md-12">-->
+<!--<div class="alert alert-warning alert-dismissible" role="alert">-->
+<!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+<!--<strong>Warning!</strong> Better check yourself, you're not looking too good.-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<script type="text/javascript">
+    // 请求服务器数据参数函数
+    var queryParams = function (params) {
+        var param = {
+            limit: params.limit,
+            offset: params.offset,
+            order: params.order,
+            ordername: params.sort,
+            uid: $('#uid').val(),
+            name: $('#name').val()
+        };
+        return param;
+    };
+
+    // 服务器数据格式化函数
+    var responseHandler = function (res) {
+        if (res.data && res.data.length > 0)
+            return {"rows": res.data, "total": res.count};
+        else
+            return {"rows": [], "total": 0};
+    };
+
+    // 详细页面文本格式化函数
+    function detailFormatter(index, row) {
+        var html = [];
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+        });
+        return html.join('');
+    }
+
+    // 自定义行样式函数
+    var rowStyle = function (row, index) {
+        if (index % 2 === 0)
+            return {classes: 'success'};
+        else
+            return {classes: 'info'};
+    };
+
+    // 自定义行属性（此函数没有实际意义）
+    var rowAttributes = function (row) {
+        if (row.name === '姓名004') return {'data-special': 'data-special'};
+    };
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<button class="btn btn-info btn-xs" type="button" style="margin: 0 5px;"><i class="fa fa-paste"></i> 详情</button>',
+            '<button class="btn btn-success btn-xs" type="button" style="margin: 0 5px;"><i class="fa fa-envelope"></i> 通知</button>'
+        ].join('');
+    }
+
+    var uidFormatter = function (value) {
+        return '<a href="https://www.baidu.com/" target="_blank">' + value + '</a>';
+    };
+
+    $('#btn-search').on('click', function () {
+        $('#example-table').bootstrapTable('refresh');
+    });
+
+    $('#btn-delete').on('click', function () {
+        var checked = $('#example-table').bootstrapTable('getSelections');
+        console.log(checked);
+    });
+
+    $('#example-table').bootstrapTable({
+        // url: 'http://localhost:8585/mock/login_info2.json',     // 服务器数据的加载地址，一般为后台请求接口，此处用 json 文件模拟
+        url: 'http://localhost:8585/information/list',
+        method: 'get',                      // 服务器数据的请求方式 'get' or 'post'，默认 'get'
+        contentType: 'application/json',    // 发送到服务器的数据编码类型
+        dataType: 'json',                   // 服务器返回的数据类型
+        cache: false,                       // 是否使用缓存，默认为 true，一般情况下需要设置为 false（不缓存）
+        responseHandler: responseHandler,   // 加载服务器数据之前的处理程序，可以用来格式化数据。参数：res 为从服务器请求到的数据
+        ajaxOptions: {                       // 提交 ajax 请求时的附加参数
+            headers: {'token': '12bubdf724'}
+        },
+
+        toolbar: '#toolbar',                // 一个jQuery 选择器，指明自定义的toolbar 例如：#toolbar, .toolbar
+        toolbarAlign: 'left',               // 指定 toolbar 水平方向的位置。'left' or 'right'
+
+        sortName: 'name',                    // 设置默认排序为 name
+        sortOrder: "desc",                   //排序方式
+
+        uniqueId: 'id',                     // 每一行的唯一标识
+
+        clickToSelect: true,                // 设置true 将在点击行时，自动选择 rediobox 和 checkbox
+        singleSelect: false,                // 设置 true 将禁止多选
+
+        striped: true,                      // 设置为 true 会有隔行变色效果
+        classes: 'table table-hover',       // 表格的类名称
+        // rowStyle: rowStyle,              // 自定义行样式，参数为：row - 行数据，index - 行下标。返回值可以为 class 或者 css
+        // rowAttributes: rowAttributes,    // 自定义行属性，参数为：row - 行数据，index - 行下标
+
+        queryParams: queryParams,           // 请求服务器数据时，可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数。
+                                            // 如果 queryParamsType = 'limit'，返回参数必须包含 limit, offset, search, sort, order
+                                            // 否则，需要包含：pageSize, pageNumber, searchText, sortName, sortOrder
+        queryParamsType: 'limit',           // 设置为 'limit' 则会发送符合 RESTFul 格式的参数
+
+        pagination: true,                   // 设置为 true 会在表格底部显示分页条
+        sidePagination: 'server',           // 设置在客户端 or 服务器进行分页，可选值为 'client' 或者 'server'。
+                                            // 设置服务器分页时，必须设置 url 或者重写 ajax 方法，返回的结果必须包含 "total", "rows" 两个参数，
+                                            // 如果后台返回不是固定的 "total", "rows" 时，可以通过 responseHandler 来格式化数据
+        paginationLoop: false,
+        pageNumber: 1,                      // 如果设置了分页，首页页码
+        pageSize: 10,                       // 如果设置了分页，页面数据条数
+        pageList: [10, 25, 50, 100],        // 如果设置了分页，设置可供选择的页面数据条数。设置为All 则显示所有记录
+        paginationPreText: '上一页',         // 指定分页条中上一页按钮的图标或文字
+        paginationNextText: '下一页',        // 指定分页条中下一页按钮的图标或文字
+        paginationVAlign: 'bottom',         // 指定「分页条」在垂直方向的位置。'top' or 'bottom' or 'both'
+        paginationHAlign: 'right',          // 指定 分页条 在水平方向的位置。'left' or 'right'
+        paginationDetailHAlign: 'left',     // 指定 分页详细信息 在水平方向的位置。'left' or 'right'
+
+        search: true,                       // 是否启用搜索框，客户端分页搜索的是全部数据，服务器分页搜索的是当前页数据
+        strictSearch: true,                 // 设置为 true 启用全匹配搜索，否则为模糊搜索
+        searchOnEnterKey: true,             // 设置为 true 时，按回车触发搜索方法，否则自动触发搜索方法
+        searchText: 'Search...',            // 初始化搜索文字
+        searchTimeOut: 1000,                // 设置搜索超时时间
+        trimOnSearch: true,                 // 设置为 true 将允许空字符搜索
+        searchAlign: 'right',               // 指定搜索框水平方向的位置。'left' or 'right'
+
+        showColumns: true,                  // 是否显示内容列下拉框
+        minimumCountColumns: 2,             // 当列数小于此值时，将隐藏内容列下拉框
+        showRefresh: true,                  // 是否显示刷新按钮
+        showToggle: true,                   // 是否显示切换试图（table/card）按钮
+        cardView: false,                    // 设置为 true 将显示 card 视图，适用于移动设备。否则为 table 试图，适用于 pc
+        buttonsAlign: 'right',               // 指定按钮水平方向的位置。'left' or 'right'
+
+        detailView: true,                   // 设置为 true 可以显示详细页面模式
+        detailFormatter: detailFormatter,   // 格式化详细页面模式的视图
+
+        columns: [
+            [
+                {
+                    field: 'state',
+                    checkbox: true,
+                    rowspan: 2,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '用户基本信息',
+                    colspan: 5,
+                    align: 'center'
+                },
+                {
+                    title: '用户购买信息',
+                    colspan: 6,
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    field: 'operate',
+                    rowspan: 2,
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: operateFormatter
+                }
+            ],
+            [
+                {
+                    field: 'uid',
+                    title: '用户编号',
+                    align: 'center',
+                    formatter: uidFormatter
+                },
+                {
+                    field: 'name',
+                    title: '姓名',
+                    align: 'center',
+                },
+                {
+                    field: 'sex',
+                    title: '性别',
+                    align: 'center'
+                },
+                {
+                    field: 'age',
+                    title: '年龄',
+                    align: 'center'
+                },
+                {
+                    field: 'area',
+                    title: '户籍所在地',
+                    align: 'center'
+                },
+                {
+                    field: 'loginway',
+                    title: '登录方式',
+                    align: 'center'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    align: 'center'
+                },
+                {
+                    field: 'createtime',
+                    title: '登录时间',
+                    align: 'center',
+                    formatter: function (value) {
+                        return moment(value).format('YYYY-MM-DD');
+                    }
+                },
+                {
+                    field: 'orderservice',
+                    title: '购买服务',
+                    align: 'center'
+                },
+                {
+                    field: 'connectip',
+                    title: '连接器IP',
+                    align: 'center'
+                },
+                {
+                    field: 'connectport',
+                    title: '连接器端口',
+                    align: 'center'
+                }
+            ]
+        ]
+    });
+</script>
+</body>
+</html>

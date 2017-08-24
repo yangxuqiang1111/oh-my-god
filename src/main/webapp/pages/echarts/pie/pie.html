@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie | ECharts</title>
+
+    <!--引入 ECharts 文件-->
+    <script src="../../../js/echarts.js?v3.6.2"></script>
+</head>
+<body>
+<!--为 ECharts 准备一个具备大小（宽高）的 DOM-->
+<div id="example_01" style="width: 1200px; height: 800px; margin: 0 auto"></div>
+<script type="text/javascript">
+    // 基于准备好的 dom，初始化 echarts 实例
+    var myChart = echarts.init(document.getElementById('example_01'));
+
+    // 水印
+    var waterMarkText = 'GWSSI';
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.height = 100;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.globalAlpha = '0.08';
+    ctx.font = '20px Microsoft Yahei';
+    ctx.translate(50, 50);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillText(waterMarkText, 0, 0);
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '某站点用户访问来源',
+            subtext: '纯属虚构',
+            left: 'center'
+        },
+        backgroundColor: {
+            image: canvas,
+            repeat: 'repeat'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a}<br />{b}: {c} ({d}%)"
+        },
+        legend: {
+            bottom: 'bottom',
+            left: 'center',
+            data: ['直达', '营销广告', '搜索引擎', '邮件营销', '联盟广告', '视频广告', '百度', '谷歌', '必应', '其他']
+        },
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                selectedMode: 'single',         // 选中模式，'single'、'multiple' 分别表示单选和多选
+                radius: [0, '20%'],
+                center: ['30%', '30%'],
+                label: {
+                    normal: {
+                        position: 'inner'       // 标签的位置，'outside'：饼图扇区外侧，'inside'／'inner'：饼图扇区内部，'center' 在饼图中心
+                    }
+                },
+                data: [
+                    {value: 335, name: '直达', selected: true},
+                    {value: 679, name: '营销广告'},
+                    {value: 1548, name: '搜索引擎'}
+                ]
+            },
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['25%', '35%'],
+                center: ['30%', '30%'],
+                data: [
+                    {value: 335, name: '直达'},
+                    {value: 310, name: '邮件营销'},
+                    {value: 234, name: '联盟广告'},
+                    {value: 135, name: '视频广告'},
+                    {value: 1048, name: '百度'},
+                    {value: 251, name: '谷歌'},
+                    {value: 147, name: '必应'},
+                    {value: 102, name: '其他'}
+                ]
+            },
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['8%', '35%'],
+                center: ['70%', '30%'],
+                roseType : 'radius',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: [
+                    {value: 335, name: '直达'},
+                    {value: 310, name: '邮件营销'},
+                    {value: 234, name: '联盟广告'},
+                    {value: 135, name: '视频广告'},
+                    {value: 1048, name: '百度'},
+                    {value: 251, name: '谷歌'},
+                    {value: 147, name: '必应'},
+                    {value: 102, name: '其他'}
+                ]
+            },
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['8%', '35%'],
+                center: ['30%', '70%'],
+                roseType : 'area',
+                data: [
+                    {value: 335, name: '直达'},
+                    {value: 310, name: '邮件营销'},
+                    {value: 234, name: '联盟广告'},
+                    {value: 135, name: '视频广告'},
+                    {value: 1048, name: '百度'},
+                    {value: 251, name: '谷歌'},
+                    {value: 147, name: '必应'},
+                    {value: 102, name: '其他'}
+                ]
+            },
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: '35%',
+                center: ['70%', '70%'],
+                data: [
+                    {value: 335, name: '直达'},
+                    {value: 310, name: '邮件营销'},
+                    {value: 234, name: '联盟广告'},
+                    {value: 135, name: '视频广告'},
+                    {value: 1048, name: '百度'},
+                    {value: 251, name: '谷歌'},
+                    {value: 147, name: '必应'},
+                    {value: 102, name: '其他'}
+                ]
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+</body>
+</html>

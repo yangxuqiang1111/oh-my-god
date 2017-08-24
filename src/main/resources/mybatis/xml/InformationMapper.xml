@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fd.bookstore.mapper.InformationMapper" >
+  <resultMap id="BaseResultMap" type="com.fd.bookstore.po.Information" >
+    <id column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="loginWay" property="loginway" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="DATE" />
+    <result column="orderService" property="orderservice" jdbcType="VARCHAR" />
+    <result column="connectIP" property="connectip" jdbcType="VARCHAR" />
+    <result column="connectPort" property="connectport" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    uid, name, sex, age, area, loginWay, status, createTime, orderService, connectIP, 
+    connectPort
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from information
+    where uid = #{uid,jdbcType=VARCHAR}
+  </select>
+  <select id="listAll" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from information
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from information
+    where uid = #{uid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fd.bookstore.po.Information" >
+    insert into information (uid, name, sex, 
+      age, area, loginWay, 
+      status, createTime, orderService, 
+      connectIP, connectPort)
+    values (#{uid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{age,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{loginway,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{createtime,jdbcType=DATE}, #{orderservice,jdbcType=VARCHAR}, 
+      #{connectip,jdbcType=VARCHAR}, #{connectport,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fd.bookstore.po.Information" >
+    insert into information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="loginway != null" >
+        loginWay,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="orderservice != null" >
+        orderService,
+      </if>
+      <if test="connectip != null" >
+        connectIP,
+      </if>
+      <if test="connectport != null" >
+        connectPort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="loginway != null" >
+        #{loginway,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=DATE},
+      </if>
+      <if test="orderservice != null" >
+        #{orderservice,jdbcType=VARCHAR},
+      </if>
+      <if test="connectip != null" >
+        #{connectip,jdbcType=VARCHAR},
+      </if>
+      <if test="connectport != null" >
+        #{connectport,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fd.bookstore.po.Information" >
+    update information
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="loginway != null" >
+        loginWay = #{loginway,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=DATE},
+      </if>
+      <if test="orderservice != null" >
+        orderService = #{orderservice,jdbcType=VARCHAR},
+      </if>
+      <if test="connectip != null" >
+        connectIP = #{connectip,jdbcType=VARCHAR},
+      </if>
+      <if test="connectport != null" >
+        connectPort = #{connectport,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uid = #{uid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fd.bookstore.po.Information" >
+    update information
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      age = #{age,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      loginWay = #{loginway,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=DATE},
+      orderService = #{orderservice,jdbcType=VARCHAR},
+      connectIP = #{connectip,jdbcType=VARCHAR},
+      connectPort = #{connectport,jdbcType=VARCHAR}
+    where uid = #{uid,jdbcType=VARCHAR}
+  </update>
+</mapper>
