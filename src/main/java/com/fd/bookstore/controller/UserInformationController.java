@@ -23,14 +23,14 @@ public class UserInformationController {
     @ResponseBody
     @RequestMapping("/list")
     public Object getInformation(
-            @RequestParam("limit") Integer limit,
-            @RequestParam("offset") Integer offset,
-            @RequestParam("order") String order,
-            @RequestParam("ordername") String ordername,
-            @RequestParam("uid") String uid,
-            @RequestParam("name") String name) {
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "pageTotal", defaultValue = "10") Integer pageTotal,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "ordername", required = false) String ordername,
+            @RequestParam(value = "uid", required = false) String uid,
+            @RequestParam(value = "name", required = false) String name) {
 
-        ArrayList<Information> infomationList = informationService.listAll(limit, offset, order, ordername, uid, name);
+        ArrayList<Information> infomationList = informationService.listAll(page, pageTotal, order, ordername, uid, name);
 
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put("data", infomationList);

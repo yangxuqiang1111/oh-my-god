@@ -1,6 +1,7 @@
 package com.fd.bookstore.mapper;
 
 import com.fd.bookstore.po.Information;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 
@@ -17,5 +18,7 @@ public interface InformationMapper {
 
     int updateByPrimaryKey(Information record);
 
-    ArrayList<Information> listAll(Integer limit, Integer offset, String order, String ordername, String uid, String name);
+    ArrayList<Information> listAll(@Param("offset") Integer offset, @Param("pageTotal") Integer pageTotal,
+                                   @Param("order") String order, @Param("ordername") String ordername,
+                                   @Param("uid") String uid, @Param("name") String name);
 }

@@ -16,7 +16,7 @@ public class InformationServiceImpl implements InformationService {
     @Autowired
     InformationMapper informationMapper;
 
-    public ArrayList<Information> listAll(Integer limit, Integer offset, String order, String ordername, String uid, String name) {
-        return informationMapper.listAll(limit, offset, order, ordername, uid, name);
+    public ArrayList<Information> listAll(Integer page, Integer pageTotal, String order, String ordername, String uid, String name) {
+        return informationMapper.listAll((page - 1) * pageTotal, pageTotal, order, ordername, uid, name);
     }
 }
